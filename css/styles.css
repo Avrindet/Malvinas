@@ -229,6 +229,7 @@ body {
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 #game-container:has(.overlay.active) #hud {
@@ -787,6 +788,23 @@ button:hover {
     flex-direction: column;
     align-items: center;
   }
+
+  .overlay-content {
+    justify-content: flex-start;
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+
+  #menu-map, #victory-map {
+    max-height: min(180px, 28vh);
+  }
+
+  .menu-right #btn-start,
+  .menu-right #btn-continue-mission,
+  .menu-right .btn-tribute {
+    padding: 14px 20px;
+    font-size: 17px;
+  }
 }
 
 /* ── Controles táctiles (celular / tablet) ── */
@@ -917,10 +935,11 @@ button:hover {
 
 .touch-mode .overlay-content {
   justify-content: flex-start;
-  min-height: 100%;
+  min-height: min-content;
+  padding-bottom: max(32px, env(safe-area-inset-bottom));
 }
 
 .touch-mode .menu-layout {
-  max-height: 85vh;
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
 }

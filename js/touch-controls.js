@@ -97,7 +97,7 @@ export class TouchControls {
     }
 
     document.addEventListener('touchmove', (e) => {
-      if (e.target.closest('#touch-controls, #game-canvas, .overlay')) {
+      if (e.target.closest('#touch-controls, #game-canvas')) {
         e.preventDefault();
       }
     }, { passive: false });
