@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0f0a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+#game-container {
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 80, 0, 0.4);
+}
+
+#game-canvas {
+  display: block;
+  cursor: crosshair;
+  background: #1a3a1a;
+}
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+#hud-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+  color: #c8e6c8;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#level-name {
+  color: #ffd700;
+  font-size: 15px;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(5, 15, 5, 0.92);
+  color: #e8f5e8;
+  text-align: center;
+  padding: 2rem;
+  z-index: 10;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay h1 {
+  font-size: 2.4rem;
+  color: #75b87a;
+  text-shadow: 0 0 20px rgba(117, 184, 122, 0.5);
+  margin-bottom: 0.3rem;
+  letter-spacing: 3px;
+}
+
+.overlay h2 {
+  font-size: 1.8rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  color: #8ab88f;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.instructions {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(117, 184, 122, 0.3);
+  border-radius: 8px;
+  padding: 1.2rem 2rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  line-height: 1.8;
+}
+
+.instructions p {
+  font-size: 0.95rem;
+  color: #b8d4ba;
+}
+
+button {
+  background: linear-gradient(135deg, #2d6a30, #1a4a1e);
+  color: #fff;
+  border: 2px solid #75b87a;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  margin: 0.4rem;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #3d8a42, #2d6a30);
+  box-shadow: 0 0 20px rgba(117, 184, 122, 0.4);
+  transform: scale(1.03);
+}
+
+#complete-msg {
+  margin-bottom: 1.5rem;
+  color: #b8d4ba;
+  max-width: 400px;
+  line-height: 1.6;
+}

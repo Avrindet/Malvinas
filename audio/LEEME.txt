@@ -1,0 +1,10 @@
+Colocá acá una grabación propia de la Marcha de las Malvinas (MP3 u OGG).
+
+1. Renombrá el archivo a: marcha-malvinas.mp3
+2. En js/config.js activá:
+   useRecording: true
+
+Importante: usá solo audio que tengas derecho a publicar
+(grabación propia, licencia explícita o dominio público).
+
+Si no hay archivo, el juego usa la banda militar sintetizada del navegador.
