@@ -1182,69 +1182,6 @@ button:hover {
   }
 }
 
-@media (orientation: portrait) and (max-width: 700px) {
-  .touch-move {
-    width: 96px;
-    height: 96px;
-    left: 6px;
-    bottom: 112px;
-  }
-
-  .touch-aim {
-    width: 96px;
-    height: 96px;
-    right: 6px;
-    bottom: 112px;
-  }
-
-  #touch-actions {
-    left: 8px;
-    right: 8px;
-    bottom: max(6px, env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    gap: 4px;
-    padding: 0 4px;
-    max-width: 100%;
-  }
-
-  .touch-btn {
-    min-width: 0;
-    width: auto;
-    height: 32px;
-    padding: 0 2px;
-    font-size: 11px;
-  }
-
-  .touch-btn-wide {
-    min-width: 0;
-  }
-
-  .touch-mode #hud-top-left {
-    top: max(6px, env(safe-area-inset-top));
-    left: 6px;
-    transform: scale(0.78);
-    transform-origin: top left;
-  }
-
-  .touch-mode #hud-bottom-left {
-    display: none;
-  }
-
-  .touch-mode #hud-bottom-right {
-    top: auto;
-    bottom: 118px;
-    right: 6px;
-    left: auto;
-    transform: scale(0.7);
-    transform-origin: bottom right;
-  }
-
-  .touch-mode #minimap {
-    display: none;
-  }
-}
-
 /* ── Controles táctiles (celular / tablet) ── */
 #touch-controls {
   position: absolute;
@@ -1380,4 +1317,64 @@ button:hover {
 .touch-mode .menu-layout {
   max-height: none;
   overflow-y: visible;
+}
+
+/* Controles y HUD en vertical — debe ir al final para ganar prioridad */
+@media (orientation: portrait) {
+  .touch-move {
+    width: 96px;
+    height: 96px;
+    left: 6px;
+    bottom: 112px;
+  }
+
+  .touch-aim {
+    width: 96px;
+    height: 96px;
+    right: 6px;
+    bottom: 112px;
+  }
+
+  #touch-actions {
+    left: 8px;
+    right: 8px;
+    bottom: max(6px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    padding: 0 4px;
+    max-width: 100%;
+  }
+
+  .touch-btn {
+    min-width: 0;
+    width: auto;
+    height: 32px;
+    padding: 0 2px;
+    font-size: 11px;
+  }
+
+  .touch-mode #hud-top-left {
+    top: max(6px, env(safe-area-inset-top));
+    left: 6px;
+    transform: scale(0.78);
+    transform-origin: top left;
+  }
+
+  .touch-mode #hud-bottom-left {
+    display: none !important;
+  }
+
+  .touch-mode #hud-bottom-right {
+    top: auto;
+    bottom: 118px;
+    right: 6px;
+    left: auto;
+    transform: scale(0.7);
+    transform-origin: bottom right;
+  }
+
+  .touch-mode #minimap {
+    display: none;
+  }
 }
