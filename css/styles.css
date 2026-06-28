@@ -786,7 +786,19 @@ button:hover {
 @media (max-width: 700px) {
   .menu-layout {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .menu-left,
+  .menu-right {
+    width: 100%;
+    flex: none;
+  }
+
+  .menu-right {
+    display: flex;
+    flex-direction: column;
   }
 
   .overlay-content {
@@ -802,8 +814,141 @@ button:hover {
   .menu-right #btn-start,
   .menu-right #btn-continue-mission,
   .menu-right .btn-tribute {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
     padding: 14px 20px;
     font-size: 17px;
+    box-sizing: border-box;
+  }
+
+  #level-select {
+    margin-bottom: 4px;
+  }
+
+  .level-option {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+  }
+
+  .overlay-actions {
+    position: static;
+    flex-direction: column;
+    align-items: stretch;
+    background: none;
+    padding-top: 12px;
+    margin-top: 8px;
+  }
+
+  .overlay-actions button {
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 8px;
+  }
+
+  .pause-panel button,
+  .abono-panel button,
+  #ammo-shop-screen .btn-abono,
+  #ammo-shop-screen .btn-secondary {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 700px) {
+  .overlay-content h1,
+  .campaign-title {
+    font-size: 26px;
+  }
+
+  .subtitle,
+  .dedication {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  #menu-map,
+  #victory-map,
+  #campaign-map {
+    max-height: min(130px, 20vh);
+    margin: 8px auto;
+  }
+
+  .credits-number {
+    font-size: 2.8rem;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 700px) {
+  .touch-move {
+    width: 96px;
+    height: 96px;
+    left: 6px;
+    bottom: 112px;
+  }
+
+  .touch-aim {
+    width: 96px;
+    height: 96px;
+    right: 6px;
+    bottom: 112px;
+  }
+
+  #touch-actions {
+    left: 108px;
+    right: 108px;
+    bottom: max(6px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  .touch-btn {
+    min-width: 0;
+    width: 100%;
+    height: 34px;
+    padding: 0 2px;
+    font-size: 11px;
+  }
+
+  .touch-btn-wide {
+    min-width: 0;
+  }
+
+  .touch-mode #hud-bottom-left {
+    top: max(8px, env(safe-area-inset-top));
+    left: auto;
+    right: 8px;
+    bottom: auto;
+    transform: scale(0.72);
+    transform-origin: top right;
+  }
+
+  .touch-mode #hud-bottom-right {
+    top: 54px;
+    right: 8px;
+    left: auto;
+    bottom: auto;
+    transform: scale(0.72);
+    transform-origin: top right;
+  }
+
+  .touch-mode #minimap {
+    width: 72px;
+    height: 72px;
+  }
+
+  .touch-mode .weapon-slots {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .touch-mode .weapon-slot {
+    min-width: 0;
+    padding: 4px 8px;
   }
 }
 
