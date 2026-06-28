@@ -520,7 +520,6 @@ export class Game {
   onCompanionWounded(ally) {
     this.missionStats.woundedEver = true;
     ally.woundedAt = performance.now();
-    this.showAlert('⚠ COMPAÑERO HERIDO — Curálo con [E] para continuar', 'attack', 6);
     this.tutorial?.notify('wounded');
   }
 
@@ -545,6 +544,13 @@ export class Game {
   }
 
   showAlert(text, type = 'attack', duration = 4) {
+    const existing = this.alerts.findIndex((a) => a.text === text);
+    if (existing >= 0) {
+      this.alerts[existing].timer = duration;
+      this.alerts[existing].duration = duration;
+      return;
+    }
+    if (this.alerts.length >= 4) this.alerts.shift();
     this.alerts.push({ text, type, timer: duration, duration });
     this.audio.playAlert(type);
   }
@@ -1232,13 +1238,18 @@ export class Game {
       drawLevelBanner(this.ctx, this.bannerText, this.bannerTimer, this.canvas.width, this.canvas.height);
     }
 
-    let alertOffset = 0;
-    for (const alert of this.alerts) {
-      drawWarningSign(
-        this.ctx, alert.text, alert.type, alert.timer, alert.duration,
-        this.canvas.width, this.frameTime, alertOffset,
-      );
-      alertOffset += alert.type === 'fog' ? 68 : 60;
+    if (!this.hasWoundedCompanions()) {
+      const portrait = this.canvas.height > this.canvas.width;
+      const maxShow = portrait ? 2 : 3;
+      const step = portrait ? 48 : 54;
+      let alertOffset = 0;
+      for (const alert of this.alerts.slice(-maxShow)) {
+        drawWarningSign(
+          this.ctx, alert.text, alert.type, alert.timer, alert.duration,
+          this.canvas.width, this.canvas.height, this.frameTime, alertOffset,
+        );
+        alertOffset += step;
+      }
     }
 
     if (this.minimapCache && this.frameCount % 2 === 0) {

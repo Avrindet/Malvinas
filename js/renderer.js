@@ -310,55 +310,53 @@ const WARNING_STYLES = {
   boss: { bg: '#7d6608', border: '#f1c40f', text: '#ffffff', sub: '#fdebd0' },
 };
 
-export function drawWarningSign(ctx, text, type, timer, duration, canvasW, frameTime, yOffset = 0) {
+export function drawWarningSign(ctx, text, type, timer, duration, canvasW, canvasH, frameTime, yOffset = 0) {
   if (timer <= 0) return;
 
+  const portrait = canvasH > canvasW;
   const fadeIn = Math.min(1, (duration - timer) / 0.35);
   const fadeOut = Math.min(1, timer / 0.45);
   const alpha = Math.min(fadeIn, fadeOut);
   const blink = type === 'attack' ? 0.75 + Math.sin(frameTime * 0.012) * 0.25 : 1;
 
   const style = WARNING_STYLES[type] || WARNING_STYLES.attack;
-  const stripH = type === 'fog' ? 64 : 56;
-  const y = 72 + yOffset;
+  const boxW = Math.min(portrait ? canvasW - 36 : 480, canvasW - 20);
+  const boxH = portrait ? (type === 'fog' ? 50 : 44) : (type === 'fog' ? 60 : 52);
+  const x = (canvasW - boxW) / 2;
+  const y = (portrait ? 106 : 68) + yOffset;
 
   ctx.save();
   ctx.globalAlpha = alpha * blink;
 
   ctx.fillStyle = style.bg;
-  ctx.fillRect(0, y, canvasW, stripH);
-
-  if (type === 'attack') {
-    ctx.fillStyle = 'rgba(0,0,0,0.15)';
-    for (let i = -stripH; i < canvasW + stripH; i += 24) {
-      ctx.beginPath();
-      ctx.moveTo(i, y);
-      ctx.lineTo(i + stripH, y + stripH);
-      ctx.lineTo(i + stripH - 8, y + stripH);
-      ctx.lineTo(i - 8, y);
-      ctx.closePath();
-      ctx.fill();
-    }
+  if (ctx.roundRect) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, boxW, boxH, 8);
+    ctx.fill();
+  } else {
+    ctx.fillRect(x, y, boxW, boxH);
   }
 
   ctx.strokeStyle = style.border;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(6, y + 6, canvasW - 12, stripH - 12);
+  ctx.lineWidth = portrait ? 2 : 3;
+  if (ctx.roundRect) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, boxW, boxH, 8);
+    ctx.stroke();
+  } else {
+    ctx.strokeRect(x, y, boxW, boxH);
+  }
 
-  ctx.fillStyle = style.text;
-  ctx.font = 'bold 23px Segoe UI, sans-serif';
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(text, canvasW / 2, y + stripH / 2 - (type === 'fog' ? 8 : 0));
+  ctx.fillStyle = style.text;
+  ctx.font = `bold ${portrait ? 12 : 16}px Segoe UI, sans-serif`;
+  const mainY = type === 'fog' ? y + boxH / 2 - 8 : y + boxH / 2 - (portrait ? 5 : 6);
+  wrapHintText(ctx, text, canvasW / 2, mainY, boxW - 20, portrait ? 14 : 16);
 
   if (type === 'fog') {
     ctx.fillStyle = style.sub;
-    ctx.font = '14px Segoe UI, sans-serif';
-    ctx.fillText('Reduzca velocidad — visibilidad limitada', canvasW / 2, y + stripH / 2 + 16);
-  } else if (type === 'attack') {
-    ctx.fillStyle = style.sub;
-    ctx.font = '13px Segoe UI, sans-serif';
-    ctx.fillText('¡Preparen defensas!', canvasW / 2, y + stripH / 2 + 16);
+    ctx.font = `${portrait ? 10 : 12}px Segoe UI, sans-serif`;
+    ctx.fillText('Visibilidad reducida', canvasW / 2, y + boxH - 10);
   }
 
   ctx.restore();
@@ -520,15 +518,14 @@ export function drawWoundedPointer(ctx, target, camera, canvasW, canvasH, frameT
 }
 
 export function drawWoundedHint(ctx, canvasW, canvasH) {
-  const topText = '⚠ COMPAÑERO HERIDO';
-  const subText = 'Acercate y curá con [E] para continuar la misión';
-  const boxW = Math.min(520, canvasW - 32);
-  const boxH = 72;
+  const portrait = canvasH > canvasW;
+  const boxW = Math.min(portrait ? canvasW - 32 : 400, canvasW - 24);
+  const boxH = portrait ? 46 : 54;
   const x = (canvasW - boxW) / 2;
-  const y = 72;
+  const y = portrait ? 102 : 68;
 
   ctx.save();
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.78)';
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.82)';
   if (ctx.roundRect) {
     ctx.beginPath();
     ctx.roundRect(x, y, boxW, boxH, 8);
@@ -537,7 +534,7 @@ export function drawWoundedHint(ctx, canvasW, canvasH) {
     ctx.fillRect(x, y, boxW, boxH);
   }
   ctx.strokeStyle = '#e74c3c';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2;
   if (ctx.roundRect) {
     ctx.beginPath();
     ctx.roundRect(x, y, boxW, boxH, 8);
@@ -546,30 +543,11 @@ export function drawWoundedHint(ctx, canvasW, canvasH) {
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#ff6b6b';
-  ctx.font = 'bold 18px Segoe UI, sans-serif';
-  ctx.fillText(topText, canvasW / 2, y + 28);
+  ctx.font = `bold ${portrait ? 12 : 15}px Segoe UI, sans-serif`;
+  ctx.fillText('⚠ Compañero herido — curá con E', canvasW / 2, y + (portrait ? 18 : 22));
   ctx.fillStyle = '#f1c40f';
-  ctx.font = 'bold 13px Segoe UI, sans-serif';
-  ctx.fillText(subText, canvasW / 2, y + 52);
-  ctx.restore();
-
-  const footW = Math.min(440, canvasW - 32);
-  const fx = (canvasW - footW) / 2;
-  const fy = canvasH - 48;
-  ctx.save();
-  ctx.fillStyle = 'rgba(120, 0, 0, 0.75)';
-  if (ctx.roundRect) {
-    ctx.beginPath();
-    ctx.roundRect(fx, fy, footW, 32, 6);
-    ctx.fill();
-  } else {
-    ctx.fillRect(fx, fy, footW, 32);
-  }
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 12px Segoe UI, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Las oleadas están en pausa hasta curar al compañero', canvasW / 2, fy + 16);
+  ctx.font = `${portrait ? 10 : 11}px Segoe UI, sans-serif`;
+  ctx.fillText('Oleadas en pausa', canvasW / 2, y + (portrait ? 34 : 40));
   ctx.restore();
 }
 

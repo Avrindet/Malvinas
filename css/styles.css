@@ -1198,19 +1198,20 @@ button:hover {
   }
 
   #touch-actions {
-    left: 108px;
-    right: 108px;
+    left: 8px;
+    right: 8px;
     bottom: max(6px, env(safe-area-inset-bottom));
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 4px;
     padding: 0 4px;
+    max-width: 100%;
   }
 
   .touch-btn {
     min-width: 0;
-    width: 100%;
-    height: 34px;
+    width: auto;
+    height: 32px;
     padding: 0 2px;
     font-size: 11px;
   }
@@ -1219,37 +1220,28 @@ button:hover {
     min-width: 0;
   }
 
+  .touch-mode #hud-top-left {
+    top: max(6px, env(safe-area-inset-top));
+    left: 6px;
+    transform: scale(0.78);
+    transform-origin: top left;
+  }
+
   .touch-mode #hud-bottom-left {
-    top: max(8px, env(safe-area-inset-top));
-    left: auto;
-    right: 8px;
-    bottom: auto;
-    transform: scale(0.72);
-    transform-origin: top right;
+    display: none;
   }
 
   .touch-mode #hud-bottom-right {
-    top: 54px;
-    right: 8px;
+    top: auto;
+    bottom: 118px;
+    right: 6px;
     left: auto;
-    bottom: auto;
-    transform: scale(0.72);
-    transform-origin: top right;
+    transform: scale(0.7);
+    transform-origin: bottom right;
   }
 
   .touch-mode #minimap {
-    width: 72px;
-    height: 72px;
-  }
-
-  .touch-mode .weapon-slots {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .touch-mode .weapon-slot {
-    min-width: 0;
-    padding: 4px 8px;
+    display: none;
   }
 }
 
