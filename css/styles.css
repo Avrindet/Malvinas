@@ -397,6 +397,64 @@ button:hover {
   font-size: 13px;
 }
 
+.difficulty-select {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.difficulty-heading {
+  color: #888;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.difficulty-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.difficulty-option {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #333;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.difficulty-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.difficulty-option.selected {
+  border-color: #74b9ff;
+  background: rgba(116, 185, 255, 0.12);
+}
+
+.difficulty-option-name {
+  display: block;
+  color: #ecf0f1;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.difficulty-option-desc {
+  display: block;
+  color: #888;
+  font-size: 11px;
+  margin-top: 3px;
+  line-height: 1.35;
+}
+
 .payment-setup-notice {
   font-size: 11px;
   color: #f1c40f;

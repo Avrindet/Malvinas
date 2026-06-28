@@ -6,6 +6,7 @@ import {
   RECAPTURE_TIME, ALLY_MAX_HEALTH,
 } from './constants.js';
 import { checkCollision } from './levels.js';
+import { scaleAllyDamage } from './difficulty.js';
 import {
   drawSoldierPlayer, drawSoldierEnemy, drawSoldierAlly,
   drawSoldierCompanion, drawCannon, drawSniper, drawVehicle, drawBoss,
@@ -254,7 +255,7 @@ export class Ally {
         bullets.push(new Bullet({
           x: this.x + Math.cos(this.angle) * 12, y: this.y + Math.sin(this.angle) * 12,
           angle: this.angle + (Math.random() - 0.5) * 0.08,
-          damage: ALLY_DAMAGE, speed: 520, explosive: false, radius: 0, owner: 'ally',
+          damage: scaleAllyDamage(ALLY_DAMAGE), speed: 520, explosive: false, radius: 0, owner: 'ally',
         }));
       }
     } else {

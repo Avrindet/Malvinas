@@ -29,7 +29,16 @@ import {
 import {
   saveMission, clearMissionSave, loadMissionSave,
 } from './mission-save.js';
-import { pickEnemyTypeForLevel } from './enemy-spawn.js';
+import {
+  applyPlayerDifficulty,
+  getActiveModifiers,
+  loadDifficultyId,
+  pickEnemyTypeWithDifficulty,
+  scaleEnemyDamage,
+  scaleSpawnIntervalMs,
+  scaleWaveEnemyCount,
+  setActiveDifficulty,
+} from './difficulty.js';
 import { evaluateBonusObjectives, getBonusSummary } from './bonus-objectives.js';
 
 export class Game {
@@ -95,6 +104,8 @@ export class Game {
     this.briefingDuration = 8;
     this.wavesReady = false;
     this.ammoShopDismissed = false;
+    this.difficultyId = loadDifficultyId();
+    this.modifiers = getActiveModifiers();
     this.tutorial = null;
     this.lastWaveNotified = 0;
     this.missionStats = createEmptyMissionStats();
@@ -230,6 +241,11 @@ export class Game {
   }
 
   startLevel(levelId, restore = null) {
+    const difficultyId = restore?.difficultyId ?? loadDifficultyId();
+    setActiveDifficulty(difficultyId);
+    this.difficultyId = difficultyId;
+    this.modifiers = getActiveModifiers();
+
     this.level = LEVELS[levelId];
     this.map = this.level.generate();
     const start = tileCenter(this.level.playerStart.x, this.level.playerStart.y);
@@ -278,6 +294,10 @@ export class Game {
 
     const fullRestore = restore?.version === 1 && restore.player;
     const abonoRestore = restore && !fullRestore;
+
+    if (!fullRestore) {
+      applyPlayerDifficulty(this.player, this.modifiers);
+    }
 
     if (fullRestore) {
       this.applyMissionRestore(restore);
@@ -369,6 +389,7 @@ export class Game {
     return {
       version: 1,
       levelId: this.level.id,
+      difficultyId: this.difficultyId,
       player: {
         x: this.player.x,
         y: this.player.y,
@@ -516,7 +537,11 @@ export class Game {
   }
 
   pickEnemyType() {
-    return pickEnemyTypeForLevel(this.level, this.wave);
+    return pickEnemyTypeWithDifficulty(this.level, this.wave, this.modifiers);
+  }
+
+  damagePlayer(amount) {
+    this.player.takeDamage(scaleEnemyDamage(amount, this.modifiers));
   }
 
   showAlert(text, type = 'attack', duration = 4) {
@@ -824,7 +849,10 @@ export class Game {
           this.tutorial?.notify('wave_start');
         }
         this.waveActive = true;
-        this.enemiesToSpawn = this.level.waves[this.wave - 1].count;
+        this.enemiesToSpawn = scaleWaveEnemyCount(
+          this.level.waves[this.wave - 1].count,
+          this.modifiers,
+        );
         this.spawnTimer = 0.5;
         this.preWaveAlertShown = false;
         this.showAlert(`⚠ OLEADA ${this.wave} — ¡LOS INGLESES ATACAN!`, 'attack', 4);
@@ -847,7 +875,10 @@ export class Game {
             this.enemiesToSpawn--;
           }
         }
-        this.spawnTimer = this.level.waves[this.wave - 1].interval / 1000;
+        this.spawnTimer = scaleSpawnIntervalMs(
+          this.level.waves[this.wave - 1].interval,
+          this.modifiers,
+        ) / 1000;
       }
     }
 
@@ -911,7 +942,7 @@ export class Game {
         if (Math.hypot(bullet.x - this.player.x, bullet.y - this.player.y) < 14) {
           bullet.alive = false;
           if (bullet.explosive) this.doExplosionOnTeam(bullet.x, bullet.y, bullet.radius, bullet.damage);
-          else this.player.takeDamage(bullet.damage);
+          else this.damagePlayer(bullet.damage);
           continue;
         }
         for (const ally of this.allies) {
@@ -932,7 +963,7 @@ export class Game {
     this.audio.playExplosion();
     this.effects.addExplosionShake(x, y, radius, this.player.x, this.player.y);
     const pd = Math.hypot(x - this.player.x, y - this.player.y);
-    if (pd < radius) this.player.takeDamage(damage * (1 - pd / radius));
+    if (pd < radius) this.damagePlayer(damage * (1 - pd / radius));
     for (const ally of this.allies) {
       if (!ally.active || !ally.alive) continue;
       const d = Math.hypot(x - ally.x, y - ally.y);

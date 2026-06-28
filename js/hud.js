@@ -20,6 +20,11 @@ import {
   showAchievementToast,
   syncStatAchievements,
 } from './achievements.js';
+import {
+  DIFFICULTIES,
+  loadDifficultyId,
+  saveDifficultyId,
+} from './difficulty.js';
 
 export class HUD {
   constructor() {
@@ -128,6 +133,7 @@ export class MenuManager {
     this.campaignStats = loadCampaignStats();
     this._creditsReturnTo = 'menu';
     this._lastVictoryLevel = null;
+    this.selectedDifficulty = loadDifficultyId();
 
     this.menuScreen = document.getElementById('menu-screen');
     this.victoryScreen = document.getElementById('victory-screen');
@@ -139,6 +145,7 @@ export class MenuManager {
     this.abonoScreen = document.getElementById('abono-screen');
     this.ammoShopScreen = document.getElementById('ammo-shop-screen');
     this.levelSelect = document.getElementById('level-select');
+    this.difficultyOptions = document.getElementById('difficulty-options');
     this.menuMapCanvas = document.getElementById('menu-map');
     this.victoryMapCanvas = document.getElementById('victory-map');
     this.campaignMapCanvas = document.getElementById('campaign-map');
@@ -287,6 +294,7 @@ export class MenuManager {
     });
 
     this.renderLevelSelect();
+    this.renderDifficultySelect();
     this.updateContinueMissionButton();
     this.updatePaymentSetupNotice();
     this.startMapAnimation();
@@ -364,6 +372,26 @@ export class MenuManager {
     this.pendingAbono = false;
   }
 
+  renderDifficultySelect() {
+    if (!this.difficultyOptions) return;
+    this.difficultyOptions.innerHTML = '';
+    for (const def of DIFFICULTIES) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `difficulty-option${def.id === this.selectedDifficulty ? ' selected' : ''}`;
+      btn.innerHTML = `
+        <span class="difficulty-option-name">${def.icon} ${def.name}</span>
+        <span class="difficulty-option-desc">${def.description}</span>
+      `;
+      btn.addEventListener('click', () => {
+        this.selectedDifficulty = def.id;
+        saveDifficultyId(def.id);
+        this.renderDifficultySelect();
+      });
+      this.difficultyOptions.appendChild(btn);
+    }
+  }
+
   renderLevelSelect() {
     this.levelSelect.innerHTML = '';
     for (const level of this.levels) {
@@ -395,7 +423,9 @@ export class MenuManager {
     this.menuScreen.classList.add('active');
     this.liberatedRegions = loadLiberatedRegions();
     this.campaignStats = loadCampaignStats();
+    this.selectedDifficulty = loadDifficultyId();
     this.renderLevelSelect();
+    this.renderDifficultySelect();
     this.updateContinueMissionButton();
     this.updatePaymentSetupNotice();
     drawIslandsMap(this.menuMapCanvas, {

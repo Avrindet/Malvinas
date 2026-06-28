@@ -3,6 +3,7 @@
  */
 
 import { loadCampaignStats } from './campaign-stats.js';
+import { getActiveDifficultyId } from './difficulty.js';
 
 const STORAGE_KEY = 'malvinas-achievements';
 
@@ -99,6 +100,13 @@ export const ACHIEVEMENTS = [
     title: 'Apoyo a la misión',
     description: 'Apoyá el desarrollo con un abono.',
     check: (ctx) => ctx.abonos >= 1,
+  },
+  {
+    id: 'veterano_win',
+    icon: '🏅',
+    title: 'A la altura del combate',
+    description: 'Completá una misión en dificultad Veterano.',
+    eventOnly: true,
   },
 ];
 
@@ -200,6 +208,10 @@ export function recordMissionAchievements(missionStats, levelId, bonus = { done:
 
   if (levelId >= 5) {
     newly.push(...unlockAchievement('fox'));
+  }
+
+  if (getActiveDifficultyId() === 'veterano') {
+    newly.push(...unlockAchievement('veterano_win'));
   }
 
   newly.push(...syncStatAchievements());
