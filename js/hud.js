@@ -1,5 +1,6 @@
-import { ABONO_CONFIG, AMMO_SHOP_CONFIG } from './config.js';
+import { ABONO_CONFIG, AMMO_SHOP_CONFIG, SITE_CONFIG } from './config.js';
 import { getPaymentSetupStatus, logPaymentSetupWarnings, openPaymentUrl } from './payments.js';
+import { shareGame } from './share.js';
 import {
   drawIslandsMap, loadLiberatedRegions, saveLiberatedRegion,
 } from './islands-map.js';
@@ -118,6 +119,7 @@ export class MenuManager {
     this.pendingAbono = false;
     this.campaignStats = loadCampaignStats();
     this._creditsReturnTo = 'menu';
+    this._lastVictoryLevel = null;
 
     this.menuScreen = document.getElementById('menu-screen');
     this.victoryScreen = document.getElementById('victory-screen');
@@ -175,6 +177,24 @@ export class MenuManager {
     document.getElementById('btn-tribute')?.addEventListener('click', () => {
       this._creditsReturnTo = 'menu';
       this.showCredits();
+    });
+
+    document.getElementById('btn-share-menu')?.addEventListener('click', () => {
+      shareGame();
+    });
+
+    document.getElementById('btn-share-victory')?.addEventListener('click', () => {
+      const level = this._lastVictoryLevel;
+      const region = level ? ` Recuperé ${level.name}.` : '';
+      shareGame({
+        text: `¡Victoria en Malvinas!${region} ${SITE_CONFIG.shareText}`,
+      });
+    });
+
+    document.getElementById('btn-share-campaign')?.addEventListener('click', () => {
+      shareGame({
+        text: `¡Completé la campaña de Malvinas! Las 6 regiones reivindicadas. ${SITE_CONFIG.shareText}`,
+      });
     });
 
     document.getElementById('btn-credits-close')?.addEventListener('click', () => {
@@ -390,6 +410,8 @@ export class MenuManager {
     document.getElementById('victory-text').textContent =
       `${level.name} recuperada en honor de quienes cayeron en ${level.region}. La reivindicación continúa.`;
 
+    this._lastVictoryLevel = level;
+
     const missionStatsEl = document.getElementById('mission-stats');
     if (missionStatsEl) {
       const bonusHtml = stats.bonus ? renderBonusObjectivesHtml(stats.bonus) : '';
@@ -414,6 +436,7 @@ export class MenuManager {
   }
 
   showCampaignVictory(stats = {}) {
+    this._lastVictoryLevel = this.levels[this.levels.length - 1];
     const allLevels = this.levels.map((l) => l.id);
     const campaign = loadCampaignStats();
     drawIslandsMap(this.campaignMapCanvas, {

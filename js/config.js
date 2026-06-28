@@ -48,3 +48,14 @@ export const MENU_MUSIC = {
   useRecording: false,
   recordingUrl: 'audio/marcha-malvinas.mp3',
 };
+
+/** Sitio publicado — usado para compartir y vista previa en WhatsApp. */
+export const SITE_CONFIG = {
+  /** URL pública (GitHub Pages). Vacío = usar la URL del navegador. */
+  publicUrl: 'https://avrindet.github.io/Malvinas/',
+  title: 'Malvinas — Por los caídos',
+  description:
+    'Juego de combate y campaña por las Islas Malvinas. Rescatá compañeros, reconquistá 6 regiones. Por los caídos.',
+  shareText:
+    'Jugá Malvinas — Por los caídos. Campaña por el archipiélago, combate táctico y homenaje a los 649 caídos.',
+};

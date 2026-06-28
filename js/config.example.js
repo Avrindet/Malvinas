@@ -41,3 +41,11 @@ export const MENU_MUSIC = {
   useRecording: false,
   recordingUrl: 'audio/marcha-malvinas.mp3',
 };
+
+/** URL pública al publicar (GitHub Pages, Netlify, etc.). */
+export const SITE_CONFIG = {
+  publicUrl: 'https://TU_USUARIO.github.io/malvinas/',
+  title: 'Malvinas — Por los caídos',
+  description: 'Juego de combate y campaña por las Islas Malvinas.',
+  shareText: 'Jugá Malvinas — Por los caídos. Campaña por el archipiélago.',
+};

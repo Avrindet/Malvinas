@@ -582,6 +582,91 @@ button:hover {
   background: #777;
 }
 
+.btn-share {
+  border: 1px solid rgba(116, 185, 255, 0.35);
+}
+
+.install-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(116, 185, 255, 0.12);
+  border: 1px solid rgba(116, 185, 255, 0.35);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.install-banner[hidden] {
+  display: none !important;
+}
+
+.install-banner-text {
+  flex: 1;
+  text-align: left;
+  line-height: 1.35;
+}
+
+.install-banner-text strong {
+  display: block;
+  color: #74b9ff;
+  font-size: 14px;
+}
+
+.install-banner-text span {
+  color: #aaa;
+  font-size: 11px;
+}
+
+.btn-install {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 13px;
+  background: #0984e3;
+}
+
+.install-dismiss {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 4px 10px;
+  font-size: 18px;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid #555;
+  color: #aaa;
+}
+
+.install-dismiss:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.share-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translateX(-50%) translateY(120%);
+  z-index: 1000;
+  max-width: min(92vw, 360px);
+  padding: 12px 18px;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #ecf0f1;
+  font-size: 14px;
+  text-align: center;
+  pointer-events: none;
+  transition: transform 0.25s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.share-toast.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
 .abono-panel {
   max-width: 420px;
 }

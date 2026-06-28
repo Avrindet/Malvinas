@@ -9,6 +9,27 @@
   <meta name="description" content="Malvinas — Por los caídos. Juego de reivindicación del archipiélago. Combate, rescate de compañeros y campaña por las 6 regiones.">
   <meta name="theme-color" content="#0d3d56">
   <title>Malvinas — Por los caídos</title>
+
+  <!-- Vista previa al compartir (WhatsApp, Telegram, etc.) -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="Malvinas — Por los caídos">
+  <meta property="og:title" content="Malvinas — Por los caídos">
+  <meta property="og:description" content="Juego de combate y campaña por las Islas Malvinas. Rescatá compañeros, reconquistá 6 regiones. Por los caídos.">
+  <meta property="og:url" content="https://avrindet.github.io/Malvinas/">
+  <meta property="og:image" content="https://avrindet.github.io/Malvinas/assets/og-share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Malvinas — Por los caídos">
+  <meta name="twitter:description" content="Juego de combate y campaña por las Islas Malvinas. Por los caídos.">
+  <meta name="twitter:image" content="https://avrindet.github.io/Malvinas/assets/og-share.png">
+
+  <!-- Instalar como app (PWA) -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+  <link rel="apple-touch-icon" href="assets/icon-512.png">
+
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -105,10 +126,20 @@
           <p class="map-caption">Archipiélago reivindicado — zonas en verde recuperadas</p>
         </div>
         <div class="menu-right">
+          <div id="install-banner" class="install-banner" hidden>
+            <div class="install-banner-text">
+              <strong>Instalá el juego</strong>
+              <span>Acceso directo desde la pantalla de inicio</span>
+            </div>
+            <button id="btn-install" type="button" class="btn-install">Instalar</button>
+            <button id="btn-install-dismiss" type="button" class="install-dismiss" aria-label="Cerrar">×</button>
+          </div>
           <div id="level-select"></div>
           <button id="btn-continue-mission" type="button" class="btn-secondary" disabled>Continuar misión guardada</button>
           <button id="btn-start">Comenzar misión</button>
           <button id="btn-tribute" type="button" class="btn-secondary btn-tribute">Homenaje a los caídos</button>
+          <button id="btn-share-menu" type="button" class="btn-secondary btn-share">Compartir juego</button>
+          <button id="btn-install-menu" type="button" class="btn-secondary btn-install-menu">Instalar en el celular</button>
         </div>
       </div>
     </div>
@@ -122,6 +153,7 @@
         <p class="map-caption">Territorio reivindicado en el archipiélago</p>
         <div class="overlay-actions victory-actions">
           <button id="btn-next">Siguiente región</button>
+          <button id="btn-share-victory" type="button" class="btn-secondary btn-share">Compartir victoria</button>
           <button id="btn-menu" class="btn-secondary">Menú principal</button>
         </div>
       </div>
@@ -137,6 +169,7 @@
         <p class="campaign-message">Las seis regiones han sido recuperadas. Por los que no volvieron, y por las generaciones que vendrán: Malvinas es argentina.</p>
         <div class="overlay-actions victory-actions">
           <button id="btn-campaign-credits" class="btn-secondary">Ver homenaje</button>
+          <button id="btn-share-campaign" type="button" class="btn-secondary btn-share">Compartir logro</button>
           <button id="btn-campaign-menu">Menú principal</button>
         </div>
       </div>
