@@ -12,6 +12,14 @@ import {
 } from './mission-save.js';
 import { renderBonusObjectivesHtml } from './bonus-objectives.js';
 import { FALLEN_COUNT, renderTributeHtml } from './credits.js';
+import {
+  recordMissionAchievements,
+  recordTributeViewed,
+  renderAchievementsHtml,
+  renderProfileStatsHtml,
+  showAchievementToast,
+  syncStatAchievements,
+} from './achievements.js';
 
 export class HUD {
   constructor() {
@@ -125,6 +133,7 @@ export class MenuManager {
     this.victoryScreen = document.getElementById('victory-screen');
     this.campaignVictoryScreen = document.getElementById('campaign-victory-screen');
     this.creditsScreen = document.getElementById('credits-screen');
+    this.profileScreen = document.getElementById('profile-screen');
     this.pauseScreen = document.getElementById('pause-screen');
     this.defeatScreen = document.getElementById('defeat-screen');
     this.abonoScreen = document.getElementById('abono-screen');
@@ -177,6 +186,14 @@ export class MenuManager {
     document.getElementById('btn-tribute')?.addEventListener('click', () => {
       this._creditsReturnTo = 'menu';
       this.showCredits();
+    });
+
+    document.getElementById('btn-profile')?.addEventListener('click', () => {
+      this.showProfile();
+    });
+
+    document.getElementById('btn-profile-close')?.addEventListener('click', () => {
+      this.showMenu();
     });
 
     document.getElementById('btn-share-menu')?.addEventListener('click', () => {
@@ -341,6 +358,7 @@ export class MenuManager {
   registerAbono() {
     const count = parseInt(localStorage.getItem('malvinas-abonos') || '0', 10) + 1;
     localStorage.setItem('malvinas-abonos', String(count));
+    showAchievementToast(syncStatAchievements());
     document.getElementById('abono-paid-check').checked = false;
     document.getElementById('abono-confirm-box').style.display = 'none';
     this.pendingAbono = false;
@@ -393,8 +411,24 @@ export class MenuManager {
     const bodyEl = document.getElementById('credits-body');
     if (countEl) countEl.textContent = String(FALLEN_COUNT);
     if (bodyEl) bodyEl.innerHTML = renderTributeHtml();
+    showAchievementToast(recordTributeViewed());
     this.hideAll();
     this.creditsScreen.classList.add('active');
+  }
+
+  showProfile() {
+    syncStatAchievements();
+    this.campaignStats = loadCampaignStats();
+    const statsEl = document.getElementById('profile-stats');
+    const achEl = document.getElementById('profile-achievements');
+    if (statsEl) statsEl.innerHTML = renderProfileStatsHtml(this.campaignStats);
+    if (achEl) achEl.innerHTML = renderAchievementsHtml();
+    this.hideAll();
+    this.profileScreen.classList.add('active');
+  }
+
+  notifyMissionAchievements(missionStats, levelId, bonus) {
+    showAchievementToast(recordMissionAchievements(missionStats, levelId, bonus));
   }
 
   showVictory(level, stats = {}) {
@@ -542,6 +576,7 @@ export class MenuManager {
     this.victoryScreen.classList.remove('active');
     this.campaignVictoryScreen.classList.remove('active');
     this.creditsScreen?.classList.remove('active');
+    this.profileScreen?.classList.remove('active');
     this.pauseScreen.classList.remove('active');
     this.defeatScreen.classList.remove('active');
     this.abonoScreen.classList.remove('active');

@@ -331,6 +331,7 @@ export class Game {
       recaptures: this.missionStats.recaptures,
       mortarShots: this.missionStats.mortarShots,
       rescues: this.missionStats.rescues,
+      woundedEver: this.missionStats.woundedEver,
       bonus,
     };
   }
@@ -1303,6 +1304,7 @@ export function initGame() {
       const stats = game.getMissionStats();
       clearMissionSave();
       recordMissionVictory(stats, game.level.id);
+      menu.notifyMissionAchievements(stats, game.level.id, stats.bonus);
       game.audio.playVictory(isFinal);
       game.startMenuMusic();
       menu.showVictory(game.level, stats);
