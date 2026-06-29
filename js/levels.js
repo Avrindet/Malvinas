@@ -357,7 +357,7 @@ export const LEVELS = [
     name: 'Bahía Fox',
     region: 'Isla Gran Malvina — Sur',
     description: 'Misión final — liberar la última región.',
-    briefing: 'Bahía Fox — el último tramo del archipiélago. Por los 649 caídos, y por las generaciones que vendrán: Malvinas es argentina. Completá la reivindicación.',
+    briefing: 'Bahía Fox — el último tramo del archipiélago. Por los 649 caídos, y por las generaciones que vendrán: Las islas Malvinas son argentinas. Completá la reivindicación.',
     mortarOperator: 4,
     enemyProfile: REGION_ENEMY_PROFILES[5],
     bonusObjectives: [

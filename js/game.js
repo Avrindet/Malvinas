@@ -1348,12 +1348,17 @@ export function initGame() {
   const unlockBtn = document.getElementById('btn-audio-unlock');
 
   const doUnlock = async () => {
-    const ok = await game.unlockAudio();
-    if (ok) unlockScreen.classList.remove('active');
+    try {
+      await game.unlockAudio();
+    } catch (err) {
+      console.warn('No se pudo activar el audio:', err);
+    }
+    unlockScreen?.classList.remove('active');
+    menu.showMenu();
   };
 
-  unlockBtn.addEventListener('click', doUnlock);
-  unlockScreen.addEventListener('click', (e) => {
+  unlockBtn?.addEventListener('click', doUnlock);
+  unlockScreen?.addEventListener('click', (e) => {
     if (e.target === unlockScreen) doUnlock();
   });
 
@@ -1379,5 +1384,6 @@ export function initGame() {
   };
 
   game.run();
+  window.__malvinasReady = true;
   return game;
 }

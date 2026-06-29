@@ -112,11 +112,15 @@
         <p class="audio-unlock-text">Tocá el botón para entrar y escuchar la Marcha de las Malvinas, con banda militar.</p>
         <button id="btn-audio-unlock" type="button">Entrar</button>
         <p class="audio-unlock-note">Los navegadores requieren un clic para activar el sonido.</p>
+        <p id="file-protocol-warning" class="file-protocol-warning" hidden>
+          Para jugar en tu PC no abras el archivo con doble clic. Ejecutá <code>iniciar.bat</code>
+          y entrá a la URL que muestra (por ejemplo <code>http://localhost:8080</code>).
+        </p>
       </div>
     </div>
 
     <!-- Pantallas de overlay -->
-    <div id="menu-screen" class="overlay active">
+    <div id="menu-screen" class="overlay">
       <div class="overlay-content menu-layout">
         <div class="menu-left">
           <h1>Malvinas</h1>
@@ -141,7 +145,7 @@
           <div id="level-select"></div>
           <button id="btn-continue-mission" type="button" class="btn-secondary" disabled>Continuar misión guardada</button>
           <button id="btn-start">Comenzar misión</button>
-          <button id="btn-tribute" type="button" class="btn-secondary btn-tribute">Homenaje a los caídos</button>
+          <button id="btn-tribute" type="button" class="btn-secondary btn-tribute">Homenaje</button>
           <button id="btn-profile" type="button" class="btn-secondary btn-profile">Estadísticas y medallas</button>
           <button id="btn-share-menu" type="button" class="btn-secondary btn-share">Compartir juego</button>
           <button id="btn-install-menu" type="button" class="btn-secondary btn-install-menu">Instalar en el celular</button>
@@ -171,7 +175,7 @@
         <canvas id="campaign-map" width="400" height="260"></canvas>
         <p class="map-caption">Todo el archipiélago — territorio argentino</p>
         <div id="campaign-stats" class="campaign-stats"></div>
-        <p class="campaign-message">Las seis regiones han sido recuperadas. Por los que no volvieron, y por las generaciones que vendrán: Malvinas es argentina.</p>
+        <p class="campaign-message">Las seis regiones han sido recuperadas. Por los que no volvieron, y por las generaciones que vendrán: Las islas Malvinas son argentinas.</p>
         <div class="overlay-actions victory-actions">
           <button id="btn-campaign-credits" class="btn-secondary">Ver homenaje</button>
           <button id="btn-share-campaign" type="button" class="btn-secondary btn-share">Compartir logro</button>
@@ -187,7 +191,7 @@
         <p class="credits-number" id="credits-count">649</p>
         <p class="credits-sub">soldados argentinos que cayeron en la guerra de 1982</p>
         <div class="credits-body" id="credits-body"></div>
-        <p class="credits-footer">Malvinas es argentina — Por los caídos, la reivindicación continúa.</p>
+        <p class="credits-footer">Las islas Malvinas son argentinas — Por los caídos, la reivindicación continúa.</p>
         <div class="overlay-actions victory-actions">
           <button id="btn-credits-close">Volver</button>
         </div>
@@ -281,6 +285,39 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      var isFile = location.protocol === 'file:';
+      var warn = document.getElementById('file-protocol-warning');
+      if (isFile && warn) warn.hidden = false;
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('btn-audio-unlock');
+        var screen = document.getElementById('audio-unlock-screen');
+        var menu = document.getElementById('menu-screen');
+
+        if (isFile && btn) {
+          btn.addEventListener('click', function () {
+            alert(
+              'El juego no puede cargar abriendo el archivo directamente.\n\n'
+              + 'Hacé doble clic en iniciar.bat (en la carpeta del juego)\n'
+              + 'y se abrirá en http://localhost:8080'
+            );
+          });
+          return;
+        }
+
+        setTimeout(function () {
+          if (window.__malvinasReady) return;
+          btn?.addEventListener('click', function () {
+            alert('El juego no terminó de cargar. Recargá con Ctrl+F5 o probá https://avrindet.github.io/Malvinas/');
+            screen?.classList.remove('active');
+            menu?.classList.add('active');
+          }, { once: true });
+        }, 5000);
+      });
+    })();
+  </script>
   <script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>

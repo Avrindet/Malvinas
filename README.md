@@ -94,4 +94,4 @@ malvinas/
 
 ---
 
-*En memoria de quienes cayeron en Malvinas. Malvinas es argentina.*
+*En memoria de quienes cayeron en Malvinas. Las islas Malvinas son argentinas.*

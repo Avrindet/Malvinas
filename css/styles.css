@@ -259,6 +259,27 @@ body {
   margin-top: 16px;
 }
 
+.file-protocol-warning {
+  color: #e74c3c;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(231, 76, 60, 0.45);
+  border-radius: 8px;
+  background: rgba(231, 76, 60, 0.08);
+}
+
+.file-protocol-warning code {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  word-break: break-all;
+}
+
 #btn-audio-unlock {
   font-size: 18px;
   padding: 14px 48px;
