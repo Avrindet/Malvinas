@@ -14,7 +14,7 @@ const STEPS = [
   {
     id: 'mortar_place',
     title: 'Paso 3/6',
-    text: 'Presioná [M] y hacé clic para colocar el mortero. El artillero irá solo al puesto.',
+    text: 'Rescatá al artillero (🎯). PC: [M] + clic. Celular: tocá M y después el mapa.',
   },
   {
     id: 'mortar_fire',

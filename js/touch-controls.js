@@ -47,7 +47,7 @@ export class TouchControls {
         <button type="button" class="touch-btn" data-key="KeyE" data-tap="1">E</button>
         <button type="button" class="touch-btn" data-key="KeyR" data-tap="1">R</button>
         <button type="button" class="touch-btn" data-key="KeyG" data-tap="1">G</button>
-        <button type="button" class="touch-btn" data-key="KeyM">M</button>
+        <button type="button" class="touch-btn touch-btn-mortar" data-key="KeyM" data-tap="1">M</button>
         <button type="button" class="touch-btn" data-key="KeyF">F</button>
         <button type="button" class="touch-btn" data-key="Digit1" data-tap="1">1</button>
         <button type="button" class="touch-btn" data-key="Digit2" data-tap="1">2</button>

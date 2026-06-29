@@ -1120,13 +1120,31 @@ export class Game {
     }
     const op = this.getMortarOperator();
     const canPlace = !!op?.rescued && !op.wounded && !this.mortar?.placed;
-    this.mortarMode = this.input.isDown('KeyM') && canPlace;
+    const touchMode = !!this.touch?.enabled;
+
+    if (touchMode) {
+      if (this.input.wasPressed('KeyM')) {
+        if (canPlace) this.mortarMode = !this.mortarMode;
+        else this.mortarMode = false;
+      }
+    } else {
+      this.mortarMode = this.input.isDown('KeyM') && canPlace;
+    }
+
+    if (this.touch?.enabled) {
+      document.body.classList.toggle('mortar-mode', this.mortarMode);
+    }
+
+    if (!canPlace) this.mortarMode = false;
 
     if (!this.mortarMode || !this.input.mouse.justPressed || this.mortar?.placed) return;
 
     const wx = this.input.mouse.x + this.camera.x;
     const wy = this.input.mouse.y + this.camera.y;
-    if (this.canPlaceMortarAt(wx, wy)) this.placeMortar(wx, wy);
+    if (this.canPlaceMortarAt(wx, wy)) {
+      this.placeMortar(wx, wy);
+      if (touchMode) this.mortarMode = false;
+    }
   }
 
   updateRecapture(dt) {
@@ -1202,6 +1220,7 @@ export class Game {
         drawMortarPreview(
           this.ctx, renderCam, this.player, wx, wy,
           this.mortar, this.canPlaceMortarAt(wx, wy),
+          this.touch?.enabled,
         );
       } else {
         drawCrosshair(this.ctx, this.input.mouse.x, this.input.mouse.y);

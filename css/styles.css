@@ -1279,6 +1279,12 @@ button:hover {
   min-width: 44px;
 }
 
+body.mortar-mode .touch-btn-mortar {
+  background: rgba(46, 204, 113, 0.55);
+  border-color: #2ecc71;
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.45);
+}
+
 .touch-mode #hud-top-right {
   display: none;
 }

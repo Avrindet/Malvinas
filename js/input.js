@@ -39,9 +39,12 @@ export class Input {
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
     canvas.addEventListener('touchstart', (e) => {
-      if (e.target !== canvas || e.touches.length !== 1) return;
-      const t = e.touches[0];
+      if (e.target !== canvas) return;
       const rect = canvas.getBoundingClientRect();
+      const t = [...e.changedTouches].find((ct) =>
+        ct.clientX >= rect.left && ct.clientX <= rect.right
+        && ct.clientY >= rect.top && ct.clientY <= rect.bottom);
+      if (!t) return;
       this.mouse.x = (t.clientX - rect.left) * this.scaleX;
       this.mouse.y = (t.clientY - rect.top) * this.scaleY;
       this.mouse.justPressed = true;

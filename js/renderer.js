@@ -686,7 +686,7 @@ export function drawLevelBanner(ctx, text, timer, canvasW, canvasH) {
   ctx.restore();
 }
 
-export function drawMortarPreview(ctx, camera, player, wx, wy, mortar, canPlace) {
+export function drawMortarPreview(ctx, camera, player, wx, wy, mortar, canPlace, touchMode = false) {
   ctx.save();
   ctx.translate(-camera.x, -camera.y);
 
@@ -720,6 +720,30 @@ export function drawMortarPreview(ctx, camera, player, wx, wy, mortar, canPlace)
   ctx.lineTo(ctx.canvas.width / 2, ctx.canvas.height / 2 + 10);
   ctx.stroke();
   ctx.restore();
+
+  if (touchMode) {
+    ctx.save();
+    const hint = canPlace
+      ? 'Tocá el círculo verde en el mapa para colocar · M cancela'
+      : 'Acercate al punto (círculo rojo = inválido) · M cancela';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.72)';
+    const boxW = Math.min(ctx.canvas.width - 24, 360);
+    const x = (ctx.canvas.width - boxW) / 2;
+    const y = ctx.canvas.height - (ctx.canvas.height > ctx.canvas.width ? 168 : 56);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, boxW, 32, 6);
+      ctx.fill();
+    } else {
+      ctx.fillRect(x, y, boxW, 32);
+    }
+    ctx.fillStyle = canPlace ? '#2ecc71' : '#f1c40f';
+    ctx.font = 'bold 11px Segoe UI, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(hint, ctx.canvas.width / 2, y + 16);
+    ctx.restore();
+  }
 }
 
 export function drawMinimap(minimapCtx, cache, player, allies, enemies) {
