@@ -11,3 +11,13 @@ Desktop.ini
 
 # Logs temporales
 *.log
+
+# Android / Play Store (generado localmente; no subir claves)
+android/android.keystore
+android/*.keystore
+android/app/
+android/build/
+android/.gradle/
+android/app-release*.apk
+android/app-release*.aab
+android/*.idsig

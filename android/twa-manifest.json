@@ -1,0 +1,32 @@
+{
+  "packageId": "io.github.avrindet.malvinas",
+  "host": "avrindet.github.io",
+  "name": "Malvinas — Por los caídos",
+  "launcherName": "Malvinas",
+  "display": "standalone",
+  "themeColor": "#0D3D56",
+  "navigationColor": "#0D3D56",
+  "backgroundColor": "#0A0A0A",
+  "startUrl": "/Malvinas/",
+  "iconUrl": "https://avrindet.github.io/Malvinas/assets/icon-512.png",
+  "maskableIconUrl": "https://avrindet.github.io/Malvinas/assets/icon-512.png",
+  "monochromeIconUrl": "https://avrindet.github.io/Malvinas/assets/icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "malvinas"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://avrindet.github.io/Malvinas/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": false
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableNotifications": false
+}

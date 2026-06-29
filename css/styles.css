@@ -418,6 +418,21 @@ button:hover {
   font-size: 13px;
 }
 
+.menu-privacy-link {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  text-align: center;
+  color: #666;
+  font-size: 11px;
+  text-decoration: none;
+}
+
+.menu-privacy-link:hover {
+  color: #74b9ff;
+  text-decoration: underline;
+}
+
 .difficulty-select {
   width: 100%;
   margin-bottom: 14px;

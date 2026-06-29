@@ -67,7 +67,7 @@ Orden recomendado:
 1. ✅ Configurar `config.js` (este documento)
 2. ✅ Probar en local
 3. ✅ Subir a GitHub Pages y probar desde otro dispositivo
-4. ⏳ Play Store (más adelante)
+4. ⏳ Play Store — ver `PLAY-STORE.md` (privacidad + APK con Bubblewrap)
 
 ---
 

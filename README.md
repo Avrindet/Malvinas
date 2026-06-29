@@ -11,6 +11,16 @@ Combate, rescate de compañeros, mortero, 6 regiones y campaña completa.
 
 Para cerrar el servidor: `cerrar-servidor.bat`
 
+## Google Play Store
+
+Guía paso a paso en **`PLAY-STORE.md`**:
+
+1. Política de privacidad: `privacidad.html` (ya publicada en el sitio)
+2. Generar app Android (TWA): ejecutá **`generar-apk.bat`** (requiere Node, Java y Android Studio)
+3. Subir el `.aab` a Play Console
+
+URL de privacidad para la ficha: `https://avrindet.github.io/Malvinas/privacidad.html`
+
 ## Publicar online (GitHub Pages) — gratis
 
 El juego es 100 % estático (HTML + CSS + JS). Se puede hospedar gratis en GitHub Pages.

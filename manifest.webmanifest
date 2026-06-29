@@ -1,4 +1,5 @@
 {
+  "id": "/Malvinas/",
   "name": "Malvinas — Por los caídos",
   "short_name": "Malvinas",
   "description": "Juego de combate y campaña por las Islas Malvinas. Por los caídos, la reivindicación continúa.",
@@ -9,6 +10,7 @@
   "background_color": "#0a0a0a",
   "theme_color": "#0d3d56",
   "lang": "es-AR",
+  "categories": ["games", "entertainment"],
   "icons": [
     {
       "src": "assets/icon-192.png",
