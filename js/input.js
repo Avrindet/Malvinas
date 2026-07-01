@@ -40,6 +40,8 @@ export class Input {
 
     canvas.addEventListener('touchstart', (e) => {
       if (e.target !== canvas) return;
+      // Apuntar/disparar lo maneja touch-controls.js en móvil
+      if (document.body.classList.contains('touch-mode')) return;
       const rect = canvas.getBoundingClientRect();
       const t = [...e.changedTouches].find((ct) =>
         ct.clientX >= rect.left && ct.clientX <= rect.right

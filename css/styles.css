@@ -1239,11 +1239,26 @@ button:hover {
   height: 130px;
 }
 
-.touch-aim {
+.touch-fire-hint {
+  position: absolute;
   right: 12px;
+  top: 38%;
   bottom: 100px;
-  width: 130px;
-  height: 130px;
+  left: 38%;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-left: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.touch-fire-hint .touch-label {
+  bottom: auto;
+  top: 12px;
+  font-size: 9px;
+  line-height: 1.35;
+  padding: 0 8px;
+  opacity: 0.45;
 }
 
 .touch-stick-base {
@@ -1271,6 +1286,9 @@ button:hover {
 .touch-aim .touch-stick-knob {
   background: rgba(231, 76, 60, 0.55);
 }
+
+/* legacy — ya no se usa el joystick derecho */
+.touch-aim { display: none; }
 
 .touch-label {
   position: absolute;
@@ -1370,11 +1388,10 @@ body.mortar-mode .touch-btn-mortar {
     bottom: 112px;
   }
 
-  .touch-aim {
-    width: 96px;
-    height: 96px;
-    right: 6px;
-    bottom: 112px;
+  .touch-fire-hint {
+    left: 34%;
+    top: 32%;
+    bottom: 108px;
   }
 
   #touch-actions {
