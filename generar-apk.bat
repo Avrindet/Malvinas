@@ -1,7 +1,19 @@
 @echo off
+setlocal EnableDelayedExpansion
 chcp 65001 >nul 2>&1
+
+rem Si lo abren con doble clic, relanzar en ventana que no se cierra sola
+if /i not "%~1"=="keepopen" (
+  start "Malvinas - Generar APK" cmd /k "%~f0" keepopen
+  exit /b
+)
+
 title Malvinas - Generar APK para Play Store
 cd /d "%~dp0"
+set "LOG=%~dp0generar-apk.log"
+
+echo. > "%LOG%"
+call :log "=== Inicio %date% %time% ==="
 
 echo.
 echo  ========================================
@@ -9,86 +21,122 @@ echo   Malvinas - Generar app Android (TWA)
 echo  ========================================
 echo.
 echo  Guia completa: PLAY-STORE.md
+echo  Log de esta ejecucion: generar-apk.log
 echo.
 
-where node >nul 2>&1
-if errorlevel 1 (
-  echo  [X] Node.js no esta instalado.
-  echo      Descargalo de https://nodejs.org/
-  echo.
-  pause
-  exit /b 1
-)
+call :find_node
+if errorlevel 1 goto :fail_node
 
-where java >nul 2>&1
-if errorlevel 1 (
-  echo  [X] Java JDK no esta instalado.
-  echo      Necesario para Bubblewrap. Ver PLAY-STORE.md
-  echo.
-  pause
-  exit /b 1
-)
+call :find_java
+if errorlevel 1 goto :fail_java
 
-where bubblewrap >nul 2>&1
-if errorlevel 1 (
-  echo  Instalando Bubblewrap (solo la primera vez)...
-  call npm install -g @bubblewrap/cli
-  if errorlevel 1 (
-    echo  No se pudo instalar Bubblewrap.
-    pause
-    exit /b 1
-  )
-)
+set "BW=npx --yes @bubblewrap/cli"
+call :log "Usando: %BW%"
 
-echo  Comprobando entorno...
-call bubblewrap doctor
-if errorlevel 1 (
+echo  Comprobando entorno (puede tardar la primera vez)...
+call :log "Ejecutando bubblewrap doctor"
+call %BW% doctor
+set "DOC_ERR=!ERRORLEVEL!"
+call :log "bubblewrap doctor exit: !DOC_ERR!"
+
+if !DOC_ERR! neq 0 (
   echo.
-  echo  Corregi lo que marque bubblewrap doctor (Android SDK, etc.)
-  echo  Ver PLAY-STORE.md
-  pause
-  exit /b 1
+  echo  [!] bubblewrap doctor reporto problemas.
+  echo      Revisa arriba que Node, Java y Android SDK esten OK.
+  echo      Guia: PLAY-STORE.md
+  goto :end
 )
 
 if not exist "android\app" (
   echo.
-  echo  Primera vez: hay que inicializar el proyecto Android.
-  echo  Se abrira un asistente interactivo.
+  echo  Primera vez: se abrira un asistente interactivo.
+  echo  Responde las preguntas en pantalla.
   echo.
   cd android
-  call bubblewrap init --manifest=https://avrindet.github.io/Malvinas/manifest.webmanifest
-  if errorlevel 1 (
-    cd ..
-    pause
-    exit /b 1
-  )
+  call %BW% init --manifest=https://avrindet.github.io/Malvinas/manifest.webmanifest
+  set "INIT_ERR=!ERRORLEVEL!"
   cd ..
+  call :log "bubblewrap init exit: !INIT_ERR!"
+  if !INIT_ERR! neq 0 goto :end
   echo.
   echo  IMPORTANTE: actualiza .well-known/assetlinks.json con el SHA256
-  echo  de tu keystore y hace git push antes de probar en el celular.
-  echo  Ver PLAY-STORE.md - Paso 4
-  echo.
-  pause
-  exit /b 0
+  echo  del keystore y hace git push. Ver PLAY-STORE.md - Paso 4
+  goto :end
 )
 
 echo.
 echo  Generando APK y AAB firmados...
 cd android
-call bubblewrap build
-set BUILD_ERR=%ERRORLEVEL%
+call %BW% build
+set "BUILD_ERR=!ERRORLEVEL!"
 cd ..
+call :log "bubblewrap build exit: !BUILD_ERR!"
 
-if %BUILD_ERR% neq 0 (
+if !BUILD_ERR! neq 0 (
   echo.
   echo  Error al compilar. Revisa PLAY-STORE.md
-  pause
-  exit /b 1
+  goto :end
 )
 
 echo.
 echo  Listo. Archivos en la carpeta android:
 echo    - app-release-signed.apk   (probar en el celular)
 echo    - app-release-bundle.aab   (subir a Play Console)
+goto :end
+
+:fail_node
+echo  [X] Node.js no esta instalado o no esta en el PATH.
 echo.
-pause
+echo  Si ya lo instalaste:
+echo    1. Cerra esta ventana
+echo    2. Reinicia la PC (o cierra sesion y volve a entrar)
+echo    3. Volve a ejecutar generar-apk.bat
+echo.
+echo  Descarga: https://nodejs.org/en/download  (Windows Installer .msi)
+goto :end
+
+:fail_java
+echo  [X] Java JDK no esta instalado o no esta en el PATH.
+echo.
+echo  Descarga JDK 17: https://adoptium.net/
+echo  Guia: PLAY-STORE.md
+goto :end
+
+:find_node
+where node >nul 2>&1
+if not errorlevel 1 (
+  for /f "delims=" %%v in ('node -v 2^>^&1') do call :log "Node: %%v"
+  exit /b 0
+)
+if exist "%ProgramFiles%\nodejs\node.exe" (
+  set "PATH=%ProgramFiles%\nodejs;%PATH%"
+  for /f "delims=" %%v in ('node -v 2^>^&1') do call :log "Node: %%v"
+  exit /b 0
+)
+exit /b 1
+
+:find_java
+where java >nul 2>&1
+if not errorlevel 1 (
+  for /f "delims=" %%v in ('java -version 2^>^&1 ^| findstr /i version') do call :log "Java: %%v"
+  exit /b 0
+)
+if exist "C:\Program Files\Eclipse Adoptium\jdk-17*\bin\java.exe" (
+  for /d %%d in ("C:\Program Files\Eclipse Adoptium\jdk-17*") do set "PATH=%%d\bin;%PATH%"
+  for /f "delims=" %%v in ('java -version 2^>^&1 ^| findstr /i version') do call :log "Java: %%v"
+  exit /b 0
+)
+exit /b 1
+
+:log
+echo %~1
+echo %~1>> "%LOG%"
+exit /b 0
+
+:end
+echo.
+echo  === Fin ===  (detalle en generar-apk.log)
+echo  Presiona una tecla para cerrar...
+pause >nul
+endlocal
+exit /b 0
