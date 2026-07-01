@@ -1392,31 +1392,13 @@ button:hover {
 
 .touch-move {
   left: 12px;
-  bottom: 100px;
-  width: 130px;
-  height: 130px;
+  bottom: 118px;
+  width: 118px;
+  height: 118px;
 }
 
 .touch-fire-hint {
-  position: absolute;
-  right: 12px;
-  top: 38%;
-  bottom: 100px;
-  left: 38%;
-  pointer-events: none;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  border-left: 1px dashed rgba(255, 255, 255, 0.08);
-}
-
-.touch-fire-hint .touch-label {
-  bottom: auto;
-  top: 12px;
-  font-size: 9px;
-  line-height: 1.35;
-  padding: 0 8px;
-  opacity: 0.45;
+  display: none;
 }
 
 .touch-stick-base {
@@ -1464,31 +1446,72 @@ button:hover {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 8px;
+  bottom: max(8px, env(safe-area-inset-bottom));
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  padding: 0 8px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0 10px;
   pointer-events: auto;
 }
 
+.touch-actions-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 5px;
+  flex-wrap: nowrap;
+}
+
+.touch-actions-row-secondary {
+  opacity: 0.95;
+}
+
 .touch-btn {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 8px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 72px;
+  height: auto;
+  min-height: 40px;
+  padding: 4px 3px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.68);
   color: #fff;
-  font-size: 13px;
-  font-weight: bold;
   font-family: inherit;
   touch-action: manipulation;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+
+.touch-btn-key {
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.touch-btn-lbl {
+  font-size: 8px;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.touch-btn-weapon {
+  max-width: 44px;
+  min-height: 34px;
+  padding: 4px 2px;
+}
+
+.touch-btn-weapon .touch-btn-key {
+  font-size: 14px;
 }
 
 .touch-btn-wide {
-  min-width: 44px;
+  max-width: 56px;
 }
 
 body.mortar-mode .touch-btn-mortar {
@@ -1515,14 +1538,14 @@ body.mortar-mode .touch-btn-mortar {
 }
 
 .touch-mode #hud-bottom-left {
-  bottom: 52px;
+  bottom: 108px;
   left: 8px;
   transform: scale(0.82);
   transform-origin: bottom left;
 }
 
 .touch-mode #hud-bottom-right {
-  bottom: 52px;
+  bottom: 108px;
   right: 8px;
   transform: scale(0.82);
   transform-origin: bottom right;
@@ -1546,35 +1569,40 @@ body.mortar-mode .touch-btn-mortar {
 /* Controles y HUD en vertical — debe ir al final para ganar prioridad */
 @media (orientation: portrait) {
   .touch-move {
-    width: 96px;
-    height: 96px;
+    width: 92px;
+    height: 92px;
     left: 6px;
-    bottom: 112px;
-  }
-
-  .touch-fire-hint {
-    left: 34%;
-    top: 32%;
-    bottom: 108px;
+    bottom: 132px;
   }
 
   #touch-actions {
-    left: 8px;
-    right: 8px;
-    bottom: max(6px, env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    left: 4px;
+    right: 4px;
+    bottom: max(4px, env(safe-area-inset-bottom));
     gap: 4px;
     padding: 0 4px;
-    max-width: 100%;
+  }
+
+  .touch-actions-row {
+    gap: 3px;
   }
 
   .touch-btn {
-    min-width: 0;
-    width: auto;
-    height: 32px;
-    padding: 0 2px;
-    font-size: 11px;
+    min-height: 36px;
+    max-width: none;
+    border-radius: 7px;
+  }
+
+  .touch-btn-key {
+    font-size: 12px;
+  }
+
+  .touch-btn-lbl {
+    font-size: 7px;
+  }
+
+  .touch-btn-weapon {
+    min-height: 30px;
   }
 
   .touch-mode #hud-top-left {
@@ -1590,14 +1618,18 @@ body.mortar-mode .touch-btn-mortar {
 
   .touch-mode #hud-bottom-right {
     top: auto;
-    bottom: 118px;
+    bottom: 138px;
     right: 6px;
     left: auto;
-    transform: scale(0.7);
+    transform: scale(0.68);
     transform-origin: bottom right;
   }
 
   .touch-mode #minimap {
     display: none;
+  }
+
+  .mission-tracker-panel {
+    max-height: min(42vh, 280px);
   }
 }
