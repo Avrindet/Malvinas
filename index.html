@@ -30,7 +30,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
   <link rel="apple-touch-icon" href="assets/icon-512.png">
 
-  <link rel="stylesheet" href="css/styles.css?v=6">>
+  <link rel="stylesheet" href="css/styles.css?v=7">>
 </head>
 <body>
   <div id="game-container">
@@ -55,6 +55,16 @@
       </div>
 
       <div id="hud-top-right">
+        <div id="mission-tracker" class="mission-tracker" hidden>
+          <button id="mission-tracker-btn" type="button" aria-expanded="false" aria-label="Objetivos de misión">
+            <span class="mission-bullet" aria-hidden="true"></span>
+            <span id="mission-tracker-count" class="mission-tracker-count">Faltan 0</span>
+          </button>
+          <div id="mission-tracker-panel" class="mission-tracker-panel" hidden>
+            <p class="mission-tracker-heading">Objetivos de misión</p>
+            <ol id="mission-tracker-list" class="mission-tracker-list"></ol>
+          </div>
+        </div>
         <div class="controls-box">
           <div><kbd>WASD</kbd> Mover</div>
           <div><kbd>Mouse</kbd> Apuntar / Disparar</div>
@@ -319,6 +329,6 @@
       });
     })();
   </script>
-  <script type="module" src="js/main.js?v=6"></script>
+  <script type="module" src="js/main.js?v=7"></script>
 </body>
 </html>

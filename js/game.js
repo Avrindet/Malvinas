@@ -40,6 +40,7 @@ import {
   setActiveDifficulty,
 } from './difficulty.js';
 import { evaluateBonusObjectives, getBonusSummary } from './bonus-objectives.js';
+import { MissionTracker } from './mission-tracker.js';
 
 export class Game {
   constructor(canvas, minimapCanvas) {
@@ -50,6 +51,7 @@ export class Game {
     this.input = new Input(canvas);
     this.touch = new TouchControls(canvas, this.input);
     this.hud = new HUD();
+    this.missionTracker = new MissionTracker();
     this.audio = new AudioManager();
     this.effects = new EffectsManager();
     this.camera = { x: 0, y: 0 };
@@ -1316,6 +1318,7 @@ export class Game {
       this.player, this.wave, this.kills, this.allies,
       this.weather, this.bossActive, this.mortar,
     );
+    this.missionTracker.update(this);
   }
 
   loop(timestamp) {
