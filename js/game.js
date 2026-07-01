@@ -114,6 +114,8 @@ export class Game {
     this._prevPlayerY = 0;
     this._footstepTimer = 0;
     this._vehicleExhaustTimer = 0;
+    this._spawnStuckTimer = 0;
+    this._victoryHintTimer = 0;
     this.atmosphere = null;
 
     this.resize();
@@ -823,7 +825,7 @@ export class Game {
     this.camera.y = Math.max(0, Math.min(this.camera.y, maxCamY));
 
     this.syncMortarState();
-    this.checkVictory();
+    this.checkVictory(dt);
 
     if (this.state === 'playing' && this.briefingTimer <= 0) {
       this.autoSaveTimer -= dt;
@@ -840,6 +842,20 @@ export class Game {
   updateWaves(dt) {
     if (this.allWavesDone && this.bossDefeated) return;
     if (this.bossActive) return;
+
+    if (this.waveActive && this.enemiesToSpawn <= 0 && this.enemies.length === 0) {
+      this.waveActive = false;
+      this._spawnStuckTimer = 0;
+      if (this.wave >= this.level.waves.length && !this.bossSpawned) {
+        this.spawnBoss();
+        this.bossSpawned = true;
+        this.bossActive = true;
+      } else if (this.wave < this.level.waves.length) {
+        this.waveTimer = 3;
+        this.preWaveAlertShown = false;
+      }
+    }
+
     if (this.hasWoundedCompanions()) return;
 
     if (!this.waveActive) {
@@ -861,6 +877,7 @@ export class Game {
         );
         this.spawnTimer = 0.5;
         this.preWaveAlertShown = false;
+        this._spawnStuckTimer = 0;
         this.showAlert(`⚠ OLEADA ${this.wave} — ¡LOS INGLESES ATACAN!`, 'attack', 4);
       }
     }
@@ -868,9 +885,19 @@ export class Game {
     if (this.waveActive && this.enemiesToSpawn > 0) {
       this.spawnTimer -= dt;
       if (this.spawnTimer <= 0 && this.spawnPoints.length > 0) {
-        const spawn = pickRandomSpawnPoint(this.spawnPoints);
-        const dist = Math.hypot(spawn.x - this.player.x, spawn.y - this.player.y);
-        if (dist > 200) {
+        const minDist = this.touch?.active ? 120 : 200;
+        let spawn = pickRandomSpawnPoint(this.spawnPoints);
+        let dist = Math.hypot(spawn.x - this.player.x, spawn.y - this.player.y);
+        if (dist <= minDist) {
+          const farthest = this.spawnPoints.reduce((best, p) => {
+            const d = Math.hypot(p.x - this.player.x, p.y - this.player.y);
+            return d > best.d ? { p, d } : best;
+          }, { p: spawn, d: dist });
+          spawn = farthest.p;
+          dist = farthest.d;
+        }
+        const forceSpawn = this._spawnStuckTimer >= 4;
+        if (dist > minDist || forceSpawn) {
           const type = this.pickEnemyType();
           if (type === 'soldier' && Math.random() < 0.18 && this.enemiesToSpawn >= 2) {
             this.enemies.push(createEnemy('soldier', spawn.x, spawn.y, this.level.id));
@@ -880,23 +907,14 @@ export class Game {
             this.enemies.push(createEnemy(type, spawn.x, spawn.y, this.level.id));
             this.enemiesToSpawn--;
           }
+          this._spawnStuckTimer = 0;
+        } else {
+          this._spawnStuckTimer += dt;
         }
         this.spawnTimer = scaleSpawnIntervalMs(
           this.level.waves[this.wave - 1].interval,
           this.modifiers,
         ) / 1000;
-      }
-    }
-
-    if (this.waveActive && this.enemiesToSpawn <= 0 && this.enemies.length === 0) {
-      this.waveActive = false;
-      if (this.wave >= this.level.waves.length && !this.bossSpawned) {
-        this.spawnBoss();
-        this.bossSpawned = true;
-        this.bossActive = true;
-      } else if (this.wave < this.level.waves.length) {
-        this.waveTimer = 3;
-        this.preWaveAlertShown = false;
       }
     }
   }
@@ -996,11 +1014,30 @@ export class Game {
     }
   }
 
-  checkVictory() {
+  checkVictory(dt = 0.016) {
     if (!this.allWavesDone || !this.bossDefeated) return;
-    if (this.hasWoundedCompanions()) return;
+
+    this._victoryHintTimer -= dt;
+
+    if (this.hasWoundedCompanions()) {
+      if (this._victoryHintTimer <= 0) {
+        this.showAlert('Curá a los compañeros heridos [E] para completar la misión', 'attack', 5);
+        this._victoryHintTimer = 14;
+      }
+      return;
+    }
+
     const allSaved = this.allies.every((a) => a.rescued && !a.wounded);
     const mortarOk = this.level.mortarOperator == null || this.mortar?.placed;
+
+    if (!mortarOk) {
+      if (this._victoryHintTimer <= 0) {
+        this.showAlert('Colocá el mortero: [M] y tocá una trinchera verde en el mapa', 'attack', 5);
+        this._victoryHintTimer = 14;
+      }
+      return;
+    }
+
     if (allSaved && mortarOk) {
       this.tutorial?.notify('victory');
       this.state = 'victory';

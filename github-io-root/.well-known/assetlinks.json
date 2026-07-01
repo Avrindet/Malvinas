@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.avrindet.twa",
+      "sha256_cert_fingerprints": [
+        "5C:C3:01:4F:F0:24:4A:D6:42:06:7A:9C:5A:5E:90:FE:14:D7:8A:14:6B:60:DA:22:B3:72:71:B1:0F:90:D2:60"
+      ]
+    }
+  }
+]

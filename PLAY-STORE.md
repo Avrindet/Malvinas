@@ -103,6 +103,14 @@ git push
 Verificá en:  
 https://avrindet.github.io/Malvinas/.well-known/assetlinks.json
 
+**Importante (GitHub Pages):** Android también exige el archivo en la **raíz del dominio**:
+
+https://avrindet.github.io/.well-known/assetlinks.json
+
+Con un repo de proyecto (`Malvinas`) eso no se publica solo. Creá el repo **`Avrindet.github.io`** y subí la carpeta `github-io-root/.well-known/` de este proyecto. Ver `github-io-root/LEEME.md`.
+
+Sin ese archivo en la raíz, la app muestra la **barra de Chrome arriba**.
+
 Probá la vinculación:
 
 ```powershell
